@@ -85,14 +85,12 @@ REQUIRED FIELDS
        +------------------+----------+-----------------------------------+
        | name             | string   | Machine-friendly identifier       |
        | description      | string   | "Use when..." trigger phrase      |
-       | type             | enum     | technique/pattern/reference/      |
-       |                  |          | discipline                        |
+       | type             | enum     | technique/pattern/reference/etc   |
        | category         | enum     | Primary management bucket         |
        | tags             | array    | Search keywords                   |
        | topics           | array    | Thematic groups                   |
        | boundary         | string   | One-sentence scope definition     |
-       | maturity         | enum     | draft/alpha/beta/stable/          |
-       |                  |          | deprecated                        |
+       | maturity         | enum     | draft/alpha/beta/stable/etc       |
        +------------------+----------+-----------------------------------+
 
 OPTIONAL FIELDS
@@ -252,28 +250,26 @@ EXAMPLES
 
 REPOSITORY STRUCTURE
        opencode-skill-spec/
-       ├── README.md                    This file
-       ├── SPEC.md                      Core specification
-       ├── LICENSE                      MIT License
-       ├── CHANGELOG.md                 Version history
-       ├── CONTRIBUTING.md              Contribution guidelines
+       ├── README.md              This file
+       ├── SPEC.md                Core specification
+       ├── LICENSE                MIT License
+       ├── CHANGELOG.md           Version history
+       ├── CONTRIBUTING.md        Contribution guidelines
        ├── docs/
-       │   ├── quick-start.md          5-minute tutorial
-       │   ├── schema-reference.md     Field documentation
-       │   ├── comparison.md           Alternative approaches
+       │   ├── quick-start.md     5-minute tutorial
+       │   ├── schema-reference   Field documentation
+       │   ├── comparison.md      Alternative approaches
        │   ├── authoring-rationale.md  Design philosophy
-       │   └── tags-topics.md          Tags vs topics guide
+       │   └── tags-topics.md     Tags vs topics guide
        └── examples/
-           └── example-skill.md         Realistic example
+           └── example-skill.md   Realistic example
 
 STATUS
        Draft v0.1
 
        Core schema is stable.
-       Seeking community feedback on:
-       - Tooling recommendations
-       - Migration guides
-       - Best practices by skill type
+       Seeking community feedback on tooling recommendations,
+       migration guides, and best practices by skill type.
 
 SEE ALSO
        SPEC.md(5)            Complete technical specification
