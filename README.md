@@ -80,6 +80,7 @@ FILE FORMAT
               Brief description...
 
 REQUIRED FIELDS
+
        +------------------+----------+-----------------------------------+
        | Field            | Type     | Purpose                           |
        +------------------+----------+-----------------------------------+
@@ -94,6 +95,7 @@ REQUIRED FIELDS
        +------------------+----------+-----------------------------------+
 
 OPTIONAL FIELDS
+
        +------------------+----------+-----------------------------------+
        | Field            | Type     | Purpose                           |
        +------------------+----------+-----------------------------------+
@@ -101,6 +103,7 @@ OPTIONAL FIELDS
        +------------------+----------+-----------------------------------+
 
 FIELD DETAILS
+
        name
               Machine-friendly identifier.
               Format: lowercase letters, numbers, hyphens.
@@ -198,6 +201,7 @@ FIELD DETAILS
                        - "Remote branch policies"
 
 DESIGN PRINCIPLES
+
        1. Management before scoring
           Metadata organizes before ranking.
 
@@ -214,6 +218,7 @@ DESIGN PRINCIPLES
           instead of arbitrary scores.
 
 EXAMPLES
+
        Example 1: Git Workflow (Technique)
 
               ---
@@ -249,6 +254,7 @@ EXAMPLES
               ---
 
 REPOSITORY STRUCTURE
+
        opencode-skill-spec/
        ├── README.md              This file
        ├── SPEC.md                Core specification
@@ -265,6 +271,7 @@ REPOSITORY STRUCTURE
            └── example-skill.md   Realistic example
 
 STATUS
+
        Draft v0.1
 
        Core schema is stable.
@@ -272,21 +279,26 @@ STATUS
        migration guides, and best practices by skill type.
 
 SEE ALSO
+
        SPEC.md(5)            Complete technical specification
        docs/quick-start.md(5) 5-minute tutorial
        docs/comparison.md(5)  Alternative approaches
        docs/schema-reference.md(5) Field-by-field reference
 
 AUTHORS
+
        OpenCode Contributors
 
 LICENSE
+
        MIT
 
 BUGS
+
        Report issues at:
        https://github.com/yourusername/opencode-skill-spec/issues
 
 NOTES
+
        For generator implementations, see docs/quick-start.md
        For validation rules, see docs/schema-reference.md
