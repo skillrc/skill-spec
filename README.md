@@ -85,13 +85,13 @@ REQUIRED FIELDS
        +------------------+----------+-----------------------------------+
        | name             | string   | Machine-friendly identifier       |
        | description      | string   | "Use when..." trigger phrase      |
-       | type             | enum     | technique|pattern|reference|       |
+       | type             | enum     | technique/pattern/reference/      |
        |                  |          | discipline                        |
        | category         | enum     | Primary management bucket         |
        | tags             | array    | Search keywords                   |
        | topics           | array    | Thematic groups                   |
        | boundary         | string   | One-sentence scope definition     |
-       | maturity         | enum     | draft|alpha|beta|stable|          |
+       | maturity         | enum     | draft/alpha/beta/stable/          |
        |                  |          | deprecated                        |
        +------------------+----------+-----------------------------------+
 
