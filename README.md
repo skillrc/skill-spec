@@ -1,25 +1,15 @@
 OPENCODE-SKILL-SPEC(5)
 
 NAME
-       opencode-skill-spec - Management-oriented metadata standard for
+       opencode-skill-spec - Manifest-first package standard for
        AI skill libraries
 
 SYNOPSIS
-       A SKILL file contains YAML frontmatter followed by Markdown content:
+       A skill package contains a machine-readable manifest plus a human-
+       readable instruction document:
 
-              ---
-              name: git-workflow
-              description: Use when planning safe git commits
-              type: technique
-              category: engineering
-              tags:
-                - git
-                - commits
-              topics:
-                - version-control
-              boundary: "Focused on local git hygiene..."
-              maturity: beta
-              ---
+              SKILL.toml
+              SKILL.md
 
 DESCRIPTION
        Most AI skill systems start simple:
@@ -38,41 +28,38 @@ DESCRIPTION
        | Can't maintain   | Abandoned skills accumulate               |
        +------------------+-------------------------------------------+
 
-       This specification defines a lightweight metadata layer that makes
-       skills discoverable, manageable, and trustworthy without adding
-       authoring friction.
+       This specification defines a manifest-first package contract that makes
+       skills discoverable, manageable, and trustworthy without forcing tools
+       to parse Markdown as their source of truth.
 
 FILE FORMAT
-       SKILL files use YAML frontmatter + Markdown body:
+       Skill packages use a manifest-first layout:
 
        +------------------+-------------------------------------------+
        | Section          | Format                                    |
        +------------------+-------------------------------------------+
-       | Frontmatter      | YAML between --- delimiters               |
-       | Content          | Markdown after second ---                 |
+       | Manifest         | TOML in SKILL.toml                        |
+       | Content          | Markdown in SKILL.md                      |
        | Encoding         | UTF-8, LF line endings                    |
-       | Extension        | .md (Markdown)                            |
+       | Compatibility    | Legacy YAML frontmatter MAY be supported  |
        +------------------+-------------------------------------------+
 
        Complete example:
 
-              ---
-              name: git-workflow
-              description: Use when planning safe git commits
-              type: technique
-              category: engineering
-              tags:
-                - git
-                - commits
-                - repository
-              topics:
-                - version-control
-                - code-hygiene
-              boundary: "Focused on local git hygiene"
-              maturity: beta
-              non_goals:
-                - "Teaching git basics"
-              ---
+              manifest_version = "1.0"
+
+              [skill]
+              name = "git-workflow"
+              version = "1.2.0"
+              description = "Use when planning safe git commits"
+              type = "technique"
+              category = "engineering"
+              boundary = "Focused on local git hygiene"
+              maturity = "beta"
+              last_verified = "2026-03-14"
+              tags = ["git", "commits", "repository"]
+              topics = ["version-control", "code-hygiene"]
+              non_goals = ["Teaching git basics"]
 
               # Git Workflow
 
@@ -84,14 +71,17 @@ REQUIRED FIELDS
        +------------------+----------+-----------------------------------+
        | Field            | Type     | Purpose                           |
        +------------------+----------+-----------------------------------+
-       | name             | string   | Machine-friendly identifier       |
-       | description      | string   | "Use when..." trigger phrase      |
-       | type             | enum     | technique/pattern/reference/etc   |
-       | category         | enum     | Primary management bucket         |
-       | tags             | array    | Search keywords                   |
-       | topics           | array    | Thematic groups                   |
-       | boundary         | string   | One-sentence scope definition     |
-       | maturity         | enum     | draft/alpha/beta/stable/etc       |
+       | manifest_version | string   | Manifest schema compatibility     |
+       | skill.name       | string   | Machine-friendly identifier       |
+       | skill.version    | string   | Skill release version (semver)    |
+       | skill.description| string   | "Use when..." trigger phrase      |
+       | skill.type       | enum     | technique/pattern/reference/etc   |
+       | skill.category   | enum     | Primary management bucket         |
+       | skill.tags       | array    | Search keywords                   |
+       | skill.topics     | array    | Thematic groups                   |
+       | skill.boundary   | string   | One-sentence scope definition     |
+       | skill.maturity   | enum     | draft/alpha/beta/stable/etc       |
+       | skill.last_verified | date  | Last verification date            |
        +------------------+----------+-----------------------------------+
 
 OPTIONAL FIELDS
@@ -99,25 +89,45 @@ OPTIONAL FIELDS
        +------------------+----------+-----------------------------------+
        | Field            | Type     | Purpose                           |
        +------------------+----------+-----------------------------------+
-       | non_goals        | array    | Explicit exclusions               |
+       | skill.non_goals  | array    | Explicit exclusions               |
+       | [source]         | table    | Repository/license metadata       |
+       | [compat]         | table    | Runtime compatibility metadata    |
        +------------------+----------+-----------------------------------+
+
+CANONICAL VS COMPATIBILITY FORMAT
+
+       Canonical metadata lives in SKILL.toml.
+
+       SKILL.md contains the actual skill instructions for humans and agents.
+
+       Legacy YAML frontmatter in SKILL.md MAY still be emitted or consumed
+       during migration, but it is considered derived compatibility metadata,
+       not the authoritative source of truth.
 
 FIELD DETAILS
 
-       name
-              Machine-friendly identifier.
-              Format: lowercase letters, numbers, hyphens.
-              Max 50 characters.
-              Example: git-workflow, code-review
+       manifest_version
+              Manifest schema version understood by tooling.
+              Example: 1.0
 
-       description
-              Human-readable trigger phrase.
-              Recommended: Start with "Use when..."
-              Length: 10-30 words.
-              Example: "Use when planning safe git commits"
+       skill.name
+               Machine-friendly identifier.
+               Format: lowercase letters, numbers, hyphens.
+               Max 50 characters.
+               Example: git-workflow, code-review
 
-       type
-              Defines instructional mode.
+       skill.version
+              Semantic version for the published skill package.
+              Example: 1.2.0
+
+       skill.description
+               Human-readable trigger phrase.
+               Recommended: Start with "Use when..."
+               Length: 10-30 words.
+               Example: "Use when planning safe git commits"
+
+       skill.type
+               Defines instructional mode.
 
               +---------------+-------------------------------------------+
               | Value         | Use For                                   |
@@ -128,8 +138,8 @@ FIELD DETAILS
               | discipline    | Rules, requirements, checklists           |
               +---------------+-------------------------------------------+
 
-       category
-              Primary management bucket.
+       skill.category
+               Primary management bucket.
 
               +---------------+-------------------------------------------+
               | Value         | Domain                                    |
@@ -147,39 +157,34 @@ FIELD DETAILS
               | general       | Cross-functional                          |
               +---------------+-------------------------------------------+
 
-       tags
-              Searchable keywords for discovery.
-              Format: lowercase, kebab-case.
-              Count: 3-5 recommended.
-              AI-generated by default, user-confirmed.
+       skill.tags
+               Searchable keywords for discovery.
+               Format: TOML array of lowercase, kebab-case strings.
+               Count: 3-5 recommended.
+               AI-generated by default, user-confirmed.
 
-              Example:
-                     tags:
-                       - git
-                       - commits
-                       - repository
+               Example:
+                     tags = ["git", "commits", "repository"]
 
-       topics
-              Thematic groups for browsing.
-              Format: kebab-case, domain-oriented.
-              Count: 1-3 recommended.
-              AI-generated by default, user-confirmed.
+       skill.topics
+               Thematic groups for browsing.
+               Format: TOML array of kebab-case strings.
+               Count: 1-3 recommended.
+               AI-generated by default, user-confirmed.
 
-              Example:
-                     topics:
-                       - version-control
-                       - code-hygiene
+               Example:
+                     topics = ["version-control", "code-hygiene"]
 
-       boundary
-              One-sentence scope definition.
+       skill.boundary
+               One-sentence scope definition.
               Format: "Focused on [concrete scope]"
               Must be specific enough to judge fit.
 
               Good: "Focused on local git hygiene and history cleanup"
               Bad:  "Helps with coding tasks"
 
-       maturity
-              Lifecycle stage.
+       skill.maturity
+               Lifecycle stage.
 
               +-----------+-----------------------------------------------+
               | Stage     | Meaning                                       |
@@ -191,14 +196,16 @@ FIELD DETAILS
               | deprecated| Kept for reference only                       |
               +-----------+-----------------------------------------------+
 
-       non_goals
-              Explicit exclusions.
-              Prevents misuse by stating what skill does NOT do.
+       skill.last_verified
+              Date the skill was last verified against the expected workflow.
+              Example: 2026-03-14
 
-              Example:
-                     non_goals:
-                       - "Teaching git fundamentals"
-                       - "Remote branch policies"
+       skill.non_goals
+               Explicit exclusions.
+               Prevents misuse by stating what skill does NOT do.
+
+               Example:
+                     non_goals = ["Teaching git fundamentals", "Remote branch policies"]
 
 DESIGN PRINCIPLES
 
