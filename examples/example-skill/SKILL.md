@@ -1,22 +1,3 @@
----
-name: git-workflow
-description: Use when planning safe git commits, history cleanup, or atomic change grouping
-type: technique
-category: engineering
-boundary: "Focused on local git hygiene, commit planning, and safe history editing"
-maturity: beta
-tags:
-  - git
-  - workflow
-  - commits
-topics:
-  - version-control
-  - code-hygiene
-non_goals:
-  - Teaching Git fundamentals
-  - Managing remote repository policy
----
-
 # Git Workflow
 
 ## Overview

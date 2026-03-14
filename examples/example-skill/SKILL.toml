@@ -1,0 +1,21 @@
+manifest_version = "1.0"
+
+[skill]
+name = "git-workflow"
+version = "1.2.0"
+description = "Use when planning safe git commits, history cleanup, or atomic change grouping"
+type = "technique"
+category = "engineering"
+boundary = "Focused on local git hygiene, commit planning, and safe history editing"
+maturity = "beta"
+last_verified = "2026-03-14"
+tags = ["git", "workflow", "commits"]
+topics = ["version-control", "code-hygiene"]
+non_goals = ["Teaching Git fundamentals", "Managing remote repository policy"]
+
+[source]
+repository = "https://github.com/example/opencode-skill-git-workflow"
+license = "MIT"
+
+[compat]
+min_opencode_version = "0.1.0"
